@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: demo
+    
+  cloud:
+
+    stream:
+      function:
+        definition: processMessage
+
+      bindings:
+          
+        processMessage-in-0:
+          destination: demo.action
+          group: demo-queue-process-message
+          consumer:
+            concurrency: 50
+            max-attempts: 1
+
+      rabbit:
+        bindings:
+
+          processMessage-in-0:
+            consumer:
+              bindingRoutingKey: demo
+              
+              autoBindDlq: false
+              #deadLetterExchange: demo.action.dlx
